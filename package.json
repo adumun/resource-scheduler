@@ -1,0 +1,43 @@
+{
+  "name": "resource-scheduler",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Generic resource scheduling application (academic, sports, surgery) running fully offline in the browser.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc -b --noEmit",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "idb": "^8.0.0",
+    "lucide-react": "^0.460.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.1.0",
+    "zustand": "^5.0.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
+    "@testing-library/user-event": "^14.1.2",
+    "@types/node": "^22.20.1",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.17.0",
+    "fake-indexeddb": "^5.0.2",
+    "globals": "^15.14.0",
+    "jsdom": "^25.0.1",
+    "tailwindcss": "^4.3.0",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.0",
+    "vite": "^7.1.0",
+    "vitest": "^3.0.0"
+  }
+}
