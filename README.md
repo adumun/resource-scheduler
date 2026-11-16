@@ -120,6 +120,8 @@ npm test
 npm run lint
 npm run build:labs
 npm run preview
+# En otra terminal, sobre el preview local:
+node scripts/smoke-labs.mjs --base=http://localhost:4173
 ```
 
 El build `npm run build:labs` utiliza `.env.labs` y genera una SPA estática en `dist/`. En ese artefacto:
