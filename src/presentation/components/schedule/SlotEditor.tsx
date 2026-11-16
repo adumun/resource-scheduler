@@ -54,13 +54,16 @@ export function SlotEditor({ slots, onChange }: { slots: TimeSlot[]; onChange: (
     onChange([...retained, ...copies]);
   };
 
-  const dateSpecificSlots = slots.filter((slot) => slot.dayOfWeek === undefined);\n\n  const columns: Column<TimeSlot>[] = [
+  const dateSpecificSlots = slots.filter((slot) => slot.dayOfWeek === undefined);
+
+  const columns: Column<TimeSlot>[] = [
     {
       key: "day",
       header: "Day",
       render: (slot) => (
         <Select value={String(slot.dayOfWeek ?? "")} onChange={(event) => update(slot.id, { dayOfWeek: event.target.value === "" ? undefined : Number(event.target.value), date: undefined })}>
-          <option value="">Specific date</option>\n          {DAYS.map((day) => <option key={day.value} value={day.value}>{day.short}</option>)}
+          <option value="">Specific date</option>
+          {DAYS.map((day) => <option key={day.value} value={day.value}>{day.short}</option>)}
         </Select>
       ),
     },
@@ -90,7 +93,8 @@ export function SlotEditor({ slots, onChange }: { slots: TimeSlot[]; onChange: (
           <p className="text-xs text-slate-500 dark:text-slate-400">Set the weekly windows when activities can be scheduled.</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button size="sm" variant="ghost" icon={<CalendarDays className="h-3.5 w-3.5" />} onClick={addDateSpecific}>Add specific date</Button>\n          <Button size="sm" variant="ghost" icon={<Copy className="h-3.5 w-3.5" />} disabled={(grouped.get(1)?.length ?? 0) === 0} onClick={copyMondayToWeekdays}>Copy Monday to weekdays</Button>
+          <Button size="sm" variant="ghost" icon={<CalendarDays className="h-3.5 w-3.5" />} onClick={addDateSpecific}>Add specific date</Button>
+          <Button size="sm" variant="ghost" icon={<Copy className="h-3.5 w-3.5" />} disabled={(grouped.get(1)?.length ?? 0) === 0} onClick={copyMondayToWeekdays}>Copy Monday to weekdays</Button>
           <Button size="sm" variant="secondary" icon={<Plus className="h-3.5 w-3.5" />} onClick={() => add()}>Add slot</Button>
         </div>
       </div>
