@@ -1,3 +1,4 @@
+import { LABS_PUBLIC_DEMO, LABS_DEMO_USER_ID } from "@/application/labsMode";
 import { NavLink, Outlet, useLocation, useNavigate, Link } from "react-router-dom";
 import { useUiStore } from "@/presentation/store/uiStore";
 import { useAuthStore } from "@/presentation/store/authStore";
@@ -109,9 +110,9 @@ export function AppShell() {
                 </div>
                 <div className="hidden text-sm sm:block">
                   <p className="font-medium leading-tight text-slate-700 dark:text-slate-200">{session.name}</p>
-                  <p className="leading-tight text-xs text-slate-400">{session.email}</p>
+                  <p className="leading-tight text-xs text-slate-400">{session.userId === LABS_DEMO_USER_ID ? "Sesión local sin credenciales" : session.email}</p>
                 </div>
-                <button
+                {!LABS_PUBLIC_DEMO ? <button
                   onClick={() => {
                     logout();
                     navigate("/login");
@@ -121,11 +122,17 @@ export function AppShell() {
                   title="Log out"
                 >
                   <LogOut className="h-4 w-4" />
-                </button>
+                </button> : null}
               </div>
             ) : null}
           </div>
         </header>
+        {session?.userId === LABS_DEMO_USER_ID ? (
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-teal-600/20 bg-teal-50 px-5 py-3 text-sm text-teal-950 dark:bg-teal-950/40 dark:text-teal-100" role="status">
+            <p><strong>Experimento de ADÜMÜN Labs.</strong> Los datos son locales y pueden perderse al limpiar el navegador. Usa únicamente información ficticia.</p>
+            <a href="https://labs.adumun.cl/" className="shrink-0 font-semibold underline underline-offset-4 focus-visible:outline focus-visible:outline-2">Volver a Labs ↗</a>
+          </div>
+        ) : null}
         <main className="flex-1 overflow-y-auto p-5">
           <Outlet />
         </main>
