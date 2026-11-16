@@ -175,7 +175,28 @@ export function ConstraintEditor({
         <p className="text-sm text-slate-500 dark:text-slate-400">{constraints.length} constraint(s)</p>
         <Button size="sm" variant="secondary" icon={<Plus className="h-3.5 w-3.5" />} onClick={() => setDraft(emptyDraft())}>Add constraint</Button>
       </div>
-      <Table columns={columns} rows={constraints} rowKey={(c) => c.id} emptyMessage="No constraints defined." />
+      <div className="space-y-2 md:hidden">
+        {constraints.length === 0 ? <p className="rounded-xl border border-dashed border-slate-300 p-6 text-center text-sm text-slate-500 dark:border-slate-700">No constraints defined yet.</p> : null}
+        {constraints.map((constraint) => (
+          <article key={constraint.id} className="rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-900">
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0">
+                <p className="break-words font-semibold text-slate-800 dark:text-slate-100">{constraint.name || constraintTypeLabel(constraint.type)}</p>
+                <p className="mt-1 text-xs text-slate-500">{constraintTypeLabel(constraint.type)}</p>
+              </div>
+              <Badge tone={constraint.hard ? "danger" : "warning"}>{constraint.hard ? "Hard" : "Soft"}</Badge>
+            </div>
+            {!constraint.hard ? <p className="mt-2 text-xs text-slate-500">Weight: {constraint.weight}</p> : null}
+            <div className="mt-3 flex flex-wrap gap-2 border-t border-slate-100 pt-3 dark:border-slate-800">
+              <Button size="sm" variant="secondary" icon={<Pencil className="h-3.5 w-3.5" />} onClick={() => setDraft(toDraft(constraint))}>Edit</Button>
+              <Button size="sm" variant="ghost" className="text-red-500" icon={<Trash2 className="h-3.5 w-3.5" />} onClick={() => onChange(constraints.filter((item) => item.id !== constraint.id))}>Delete</Button>
+            </div>
+          </article>
+        ))}
+      </div>
+      <div className="hidden md:block">
+        <Table columns={columns} rows={constraints} rowKey={(c) => c.id} emptyMessage="No constraints defined." />
+      </div>
       {draft ? <ConstraintForm draft={draft} resources={resources} activities={activities} slots={slots} groupIds={groupIds} onSave={save} onClose={() => setDraft(null)} /> : null}
     </div>
   );
@@ -214,7 +235,7 @@ function ConstraintForm({
       }
     >
       <div className="space-y-4">
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <Field label="Type">
             <Select value={d.type} onChange={(e) => set({ type: e.target.value as ConstraintType })}>
               {TYPES.map((t) => (<option key={t} value={t}>{constraintTypeLabel(t)}</option>))}

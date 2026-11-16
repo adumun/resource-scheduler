@@ -1,0 +1,2 @@
+# Cloudflare Pages: client-side routes (/demo, /schedules/*) load the SPA.
+/* /index.html 200

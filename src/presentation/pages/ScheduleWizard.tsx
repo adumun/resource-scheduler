@@ -107,23 +107,34 @@ export function ScheduleWizard() {
   };
 
   return (
-    <div className="mx-auto max-w-4xl space-y-5">
+    <div className="mx-auto max-w-4xl space-y-4 pb-2 md:space-y-5">
       <div>
         <h1 className="text-lg font-semibold text-slate-900 dark:text-slate-100">New schedule</h1>
         <p className="text-sm text-slate-500 dark:text-slate-400">Configure your scheduling problem in {STEPS.length} steps.</p>
       </div>
 
-      <div className="flex items-center gap-1 overflow-x-auto">
+      <div className="space-y-2 md:hidden" aria-live="polite">
+        <div className="flex items-center justify-between gap-3">
+          <span className="text-xs font-semibold uppercase tracking-wide text-brand-700 dark:text-brand-300">Step {step + 1} of {STEPS.length}</span>
+          <span className="truncate text-sm font-semibold text-slate-800 dark:text-slate-100">{STEPS[step]}</span>
+        </div>
+        <div className="h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
+          <div className="h-full rounded-full bg-brand-600 transition-all" style={{ width: `${((step + 1) / STEPS.length) * 100}%` }} />
+        </div>
+      </div>
+
+      <div className="hidden items-center gap-1 overflow-x-auto md:flex">
         {STEPS.map((label, i) => (
           <div key={label} className="flex items-center gap-1">
             <button
               onClick={() => setStep(i)}
-              className={`flex h-7 items-center gap-1.5 rounded-full px-3 text-xs font-medium transition-colors ${i === step ? "bg-brand-600 text-white" : i < step ? "bg-brand-100 text-brand-700 dark:bg-brand-900/40 dark:text-brand-200" : "bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400"}`}
+              aria-current={i === step ? "step" : undefined}
+              className={`flex h-9 items-center gap-1.5 whitespace-nowrap rounded-full px-3 text-xs font-medium transition-colors ${i === step ? "bg-brand-600 text-white" : i < step ? "bg-brand-100 text-brand-700 dark:bg-brand-900/40 dark:text-brand-200" : "bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400"}`}
             >
               <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white/20">{i < step ? <Check className="h-3 w-3" /> : i + 1}</span>
               {label}
             </button>
-            {i < STEPS.length - 1 ? <ChevronRight className="h-3 w-3 text-slate-300" /> : null}
+            {i < STEPS.length - 1 ? <ChevronRight className="h-3 w-3 shrink-0 text-slate-300" /> : null}
           </div>
         ))}
       </div>
@@ -137,7 +148,7 @@ export function ScheduleWizard() {
             <Field label="Description">
               <Textarea rows={2} value={config.description} onChange={(e) => set({ description: e.target.value })} />
             </Field>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <Field label="Preset">
                 <Select value={config.preset} onChange={(e) => set({ preset: e.target.value as SchedulePreset })}>
                   <option value="academic">Academic</option>
@@ -146,7 +157,7 @@ export function ScheduleWizard() {
                   <option value="custom">Custom</option>
                 </Select>
               </Field>
-              <div className="flex items-end">
+              <div className="flex items-end sm:pt-0">
                 <Button variant="subtle" icon={<Wand2 className="h-4 w-4" />} onClick={loadDemo}>Load demo data for preset</Button>
               </div>
             </div>
@@ -159,7 +170,7 @@ export function ScheduleWizard() {
         ) : step === 2 ? (
           <div className="space-y-3">
             <div className="flex justify-end">
-              <Button size="sm" variant="ghost" onClick={() => set({ slots: makeDefaultWeekdaySlots() })}>Fill default weekday blocks</Button>
+              <Button size="sm" variant="secondary" className="min-h-11 w-full sm:w-auto" onClick={() => set({ slots: makeDefaultWeekdaySlots() })}>Replace with weekday template</Button>
             </div>
             <SlotEditor slots={config.slots} onChange={(slots) => set({ slots })} />
           </div>
@@ -184,14 +195,14 @@ export function ScheduleWizard() {
         )}
       </Card>
 
-      <div className="flex justify-between">
-        <Button variant="ghost" icon={<ChevronLeft className="h-4 w-4" />} onClick={() => (step === 0 ? navigate("/schedules") : setStep(step - 1))}>
+      <div className="sticky bottom-0 z-20 -mx-4 flex items-center justify-between gap-3 border-t border-slate-200 bg-white/95 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur dark:border-slate-800 dark:bg-slate-950/95 md:static md:mx-0 md:border-0 md:bg-transparent md:px-0 md:py-0 md:pb-0 md:backdrop-blur-none">
+        <Button className="min-h-11" variant="ghost" icon={<ChevronLeft className="h-4 w-4" />} onClick={() => (step === 0 ? navigate("/schedules") : setStep(step - 1))}>
           {step === 0 ? "Cancel" : "Back"}
         </Button>
         {step < STEPS.length - 1 ? (
-          <Button icon={<ChevronRight className="h-4 w-4" />} disabled={!canNext} onClick={() => setStep(step + 1)}>Next</Button>
+          <Button className="min-h-11 min-w-28" icon={<ChevronRight className="h-4 w-4" />} disabled={!canNext} onClick={() => setStep(step + 1)}>Next</Button>
         ) : (
-          <Button icon={<Sparkles className="h-4 w-4" />} loading={scheduling.running} disabled={scheduling.running} onClick={finish}>Create & run</Button>
+          <Button className="min-h-11" icon={<Sparkles className="h-4 w-4" />} loading={scheduling.running} disabled={scheduling.running} onClick={finish}>Create & run</Button>
         )}
       </div>
     </div>

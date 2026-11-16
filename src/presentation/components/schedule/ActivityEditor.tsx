@@ -97,7 +97,33 @@ export function ActivityEditor({ activities, resources, onChange }: { activities
         <p className="text-sm text-slate-500 dark:text-slate-400">{activities.length} activit(y/ies), {activities.reduce((s, a) => s + a.count, 0)} instances</p>
         <Button size="sm" variant="secondary" icon={<Plus className="h-3.5 w-3.5" />} onClick={() => setDraft(emptyDraft())}>Add activity</Button>
       </div>
-      <Table columns={columns} rows={activities} rowKey={(a) => a.id} emptyMessage="No activities defined." />
+      <div className="space-y-2 md:hidden">
+        {activities.length === 0 ? <p className="rounded-xl border border-dashed border-slate-300 p-6 text-center text-sm text-slate-500 dark:border-slate-700">No activities defined yet.</p> : null}
+        {activities.map((activity) => (
+          <article key={activity.id} className="rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-900">
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0">
+                <h3 className="break-words font-semibold text-slate-800 dark:text-slate-100">{activity.name}</h3>
+                <p className="mt-0.5 text-xs text-slate-500">{activity.kind}{activity.groupId ? ` · ${activity.groupId}` : ""}</p>
+              </div>
+              <Badge tone={activity.active ? "success" : "neutral"}>{activity.active ? "Active" : "Inactive"}</Badge>
+            </div>
+            <div className="mt-3 grid grid-cols-3 gap-2">
+              <div className="rounded-lg bg-slate-50 p-2 dark:bg-slate-800"><p className="text-xs text-slate-500">Instances</p><p className="font-semibold">{activity.count}</p></div>
+              <div className="rounded-lg bg-slate-50 p-2 dark:bg-slate-800"><p className="text-xs text-slate-500">Duration</p><p className="font-semibold">{activity.durationMinutes} min</p></div>
+              <div className="rounded-lg bg-slate-50 p-2 dark:bg-slate-800"><p className="text-xs text-slate-500">Priority</p><p className="font-semibold">{activity.priority}</p></div>
+            </div>
+            <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">Requirements: {activity.requirements.map((requirement) => requirement.role).join(", ") || "None"}</p>
+            <div className="mt-3 flex flex-wrap gap-2 border-t border-slate-100 pt-3 dark:border-slate-800">
+              <Button size="sm" variant="secondary" icon={<Pencil className="h-3.5 w-3.5" />} onClick={() => setDraft(toDraft(activity))}>Edit</Button>
+              <Button size="sm" variant="ghost" className="text-red-500" icon={<Trash2 className="h-3.5 w-3.5" />} onClick={() => onChange(activities.filter((item) => item.id !== activity.id))}>Delete</Button>
+            </div>
+          </article>
+        ))}
+      </div>
+      <div className="hidden md:block">
+        <Table columns={columns} rows={activities} rowKey={(a) => a.id} emptyMessage="No activities defined." />
+      </div>
       {draft ? <ActivityForm draft={draft} resources={resources} onSave={save} onClose={() => setDraft(null)} /> : null}
     </div>
   );
@@ -136,7 +162,7 @@ function ActivityForm({ draft, resources, onSave, onClose }: { draft: Draft; res
         <Field label="Name" required>
           <Input value={d.name} onChange={(e) => setD({ ...d, name: e.target.value })} />
         </Field>
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <Field label="Kind"><Input value={d.kind} onChange={(e) => setD({ ...d, kind: e.target.value })} /></Field>
           <Field label="Group id"><Input value={d.groupId} onChange={(e) => setD({ ...d, groupId: e.target.value })} /></Field>
           <Field label="Priority"><Input type="number" value={d.priority} onChange={(e) => setD({ ...d, priority: Number(e.target.value) })} /></Field>
@@ -159,7 +185,7 @@ function ActivityForm({ draft, resources, onSave, onClose }: { draft: Draft; res
             {d.requirements.map((req, i) => (
               <div key={i} className="rounded-lg border border-slate-200 p-3 dark:border-slate-700">
                 <div className="flex items-center gap-2">
-                  <Input className="w-40" placeholder="role (e.g. teacher)" value={req.role} onChange={(e) => updateReq(i, { role: e.target.value })} />
+                  <Input className="min-w-0 flex-1" placeholder="role (e.g. teacher)" value={req.role} onChange={(e) => updateReq(i, { role: e.target.value })} />
                   <Button size="sm" variant="ghost" className="ml-auto text-red-500" icon={<Trash2 className="h-3.5 w-3.5" />} onClick={() => setD({ ...d, requirements: d.requirements.filter((_, idx) => idx !== i) })} />
                 </div>
                 <p className="mb-1 mt-2 text-xs text-slate-400">Candidate resources{req.role ? ` with role "${req.role}"` : ""}:</p>

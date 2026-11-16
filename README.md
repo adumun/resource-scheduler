@@ -110,6 +110,32 @@ Tests use Vitest + React Testing Library (jsdom). Coverage includes:
 - **Import/export**: round-trip, corrupt JSON, bad schema version, missing fields, dangling references.
 - **Components**: Button/Badge rendering and interaction.
 
+## ADÜMÜN Labs: demo público aislado (ADU-180)
+
+Resource Scheduler puede usarse como **experimento web con datos ficticios y sin credenciales**. Este modo no reemplaza la aplicación local ni convierte la autenticación simulada en un servicio real.
+
+```bash
+npm ci
+npm test
+npm run lint
+npm run validate:labs
+npm run preview
+# En otra terminal, sobre el preview local:
+node scripts/smoke-labs.mjs --base=http://localhost:4173
+```
+
+El build `npm run build:labs` utiliza `.env.labs` y genera una SPA estática en `dist/`. En ese artefacto:
+
+- La ruta `/demo` inicia una sesión **anónima y local** (`adumun-labs-demo`), sin registro, correo personal ni contraseña.
+- `/login` y `/register` redirigen a `/demo`; el build normal `npm run build` conserva la experiencia original.
+- Los datos, incluido el ejemplo de planificación, viven **solo en IndexedDB/localStorage del navegador**. No se sincronizan ni respaldan; se pierden al borrar los datos del sitio.
+- La interfaz muestra permanentemente un aviso de modo experimental y un enlace de regreso a `https://labs.adumun.cl/`.
+- Vite genera los assets y Cloudflare Pages usa `public/_redirects` para resolver rutas SPA directas/refresh.
+
+**Cloudflare Pages, proyecto independiente por validar:** root `/`, build `npm run validate:labs`, output `dist`, rama `master` solo después de revisión y QA del PR. No añadir el enlace `/demo` a Labs ni marcarlo publicado antes de verificar el dominio y los assets. No introducir secretos en `VITE_*`.
+
+> Seguridad: ningún dato de usuarios ni proyectos reales debe entrar en esta demo. La autenticación anterior sigue siendo solo para uso local y nunca debe presentarse como un login de producción.
+
 ## Production build
 
 ```bash
