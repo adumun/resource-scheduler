@@ -72,6 +72,12 @@ export function AuthPage({ mode }: { mode: "login" | "register" }) {
               {isRegister ? "Create account" : "Sign in"}
             </Button>
           </form>
+          <div className="mt-4 rounded-lg border border-teal-200 bg-teal-50 p-3 text-center dark:border-teal-900 dark:bg-teal-900/20">
+            <p className="text-xs text-teal-900 dark:text-teal-100">Esta autenticación es solo una simulación local, no una cuenta segura.</p>
+            <Link to="/demo" className="mt-2 inline-block rounded-lg bg-teal-700 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">
+              Explorar sin crear cuenta
+            </Link>
+          </div>
           <p className="mt-4 text-center text-sm text-slate-500 dark:text-slate-400">
             {isRegister ? (
               <>
