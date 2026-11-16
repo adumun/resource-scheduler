@@ -135,7 +135,7 @@ export function SlotEditor({ slots, onChange }: { slots: TimeSlot[]; onChange: (
                       </div>
                     </div>
                   ))}
-                  <Button block size="lg" variant="secondary" icon={<Plus className="h-4 w-4" />} onClick={() => add(day.value)}>Add time window</Button>
+                  <Button className="w-full min-h-11" size="lg" variant="secondary" icon={<Plus className="h-4 w-4" />} onClick={() => add(day.value)}>Add time window</Button>
                 </div>
               ) : null}
             </section>
