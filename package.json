@@ -12,7 +12,8 @@
     "test:watch": "vitest",
     "typecheck": "tsc -b --noEmit",
     "lint": "eslint .",
-    "build:labs": "tsc -b && vite build --mode labs"
+    "build:labs": "tsc -b && vite build --mode labs",
+    "validate:labs": "npm test && npm run lint && npm run build:labs"
   },
   "dependencies": {
     "idb": "^8.0.0",
