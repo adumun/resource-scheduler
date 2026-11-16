@@ -184,13 +184,13 @@ function ResourceForm({ draft, onSave, onClose }: { draft: Draft; onSave: (d: Dr
           <p className="mb-2 text-xs text-slate-400">Empty availability means always available.</p>
           <div className="space-y-2">
             {d.availability.map((a, i) => (
-              <div key={i} className="flex items-center gap-2">
-                <Select value={String(a.dayOfWeek ?? "")} onChange={(e) => setAvail(i, { dayOfWeek: e.target.value === "" ? undefined : Number(e.target.value) })}>
+              <div key={i} className="grid grid-cols-2 items-center gap-2 sm:flex">
+                <Select className="min-w-0" value={String(a.dayOfWeek ?? "")} onChange={(e) => setAvail(i, { dayOfWeek: e.target.value === "" ? undefined : Number(e.target.value) })}>
                   {DAYS.map((day) => (<option key={day.value} value={day.value}>{day.label}</option>))}
                 </Select>
-                <Input className="w-24" value={minutesToHHMM(a.startMinutes)} onChange={(e) => setAvail(i, { startMinutes: labelToMinutesSafe(e.target.value, a.startMinutes) })} />
+                <Input className="w-full sm:w-24" value={minutesToHHMM(a.startMinutes)} onChange={(e) => setAvail(i, { startMinutes: labelToMinutesSafe(e.target.value, a.startMinutes) })} />
                 <span className="text-slate-400">–</span>
-                <Input className="w-24" value={minutesToHHMM(a.endMinutes)} onChange={(e) => setAvail(i, { endMinutes: labelToMinutesSafe(e.target.value, a.endMinutes) })} />
+                <Input className="w-full sm:w-24" value={minutesToHHMM(a.endMinutes)} onChange={(e) => setAvail(i, { endMinutes: labelToMinutesSafe(e.target.value, a.endMinutes) })} />
                 <Button size="sm" variant="ghost" className="text-red-500" icon={<Trash2 className="h-3.5 w-3.5" />} onClick={() => setD({ ...d, availability: d.availability.filter((_, idx) => idx !== i) })} />
               </div>
             ))}
