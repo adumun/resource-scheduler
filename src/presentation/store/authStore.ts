@@ -9,6 +9,7 @@ interface AuthState {
   init: () => void;
   login: (input: LoginInput) => Promise<boolean>;
   register: (input: RegisterInput) => Promise<boolean>;
+  enterDemo: () => void;
   logout: () => void;
   clearError: () => void;
 }
@@ -41,6 +42,9 @@ export const useAuthStore = create<AuthState>((set) => ({
       set({ loading: false, error: (err as { errors?: string[] }).errors ?? ["Registration failed."] });
       return false;
     }
+  },
+  enterDemo: () => {
+    set({ session: authService.startDemo(), loading: false, error: null });
   },
   logout: () => {
     authService.logout();
