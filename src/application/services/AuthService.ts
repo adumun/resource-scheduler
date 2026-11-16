@@ -43,6 +43,7 @@ export class AuthService {
       if (
         typeof parsed.userId === "string" &&
         typeof parsed.email === "string" &&
+        typeof parsed.name === "string" &&
         (!LABS_PUBLIC_DEMO || parsed.userId === LABS_DEMO_USER_ID)
       ) return parsed;
       return null;
