@@ -54,7 +54,7 @@ export function SlotEditor({ slots, onChange }: { slots: TimeSlot[]; onChange: (
       header: "Day",
       render: (slot) => (
         <Select value={String(slot.dayOfWeek ?? "")} onChange={(event) => update(slot.id, { dayOfWeek: event.target.value === "" ? undefined : Number(event.target.value), date: undefined })}>
-          {DAYS.map((day) => <option key={day.value} value={day.value}>{day.short}</option>)}
+          <option value="">Specific date</option>\n          {DAYS.map((day) => <option key={day.value} value={day.value}>{day.short}</option>)}
         </Select>
       ),
     },
