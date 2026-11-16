@@ -1,3 +1,4 @@
+import { LABS_DEMO_USER_ID } from "@/application/labsMode";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useScheduleStore } from "@/presentation/store/scheduleStore";
@@ -92,7 +93,21 @@ export function Dashboard() {
         </div>
       </div>
 
-      {loading ? (
+      {session?.userId === LABS_DEMO_USER_ID ? (
+        <section className="flex flex-col gap-3 rounded-xl border border-teal-200 bg-teal-50 p-4 dark:border-teal-900 dark:bg-teal-900/20 sm:flex-row sm:items-center sm:justify-between" aria-label="Prueba el simulador con datos ficticios">
+          <div>
+            <h2 className="font-semibold text-teal-950 dark:text-teal-100">¿Qué estamos probando?</h2>
+            <p className="text-sm text-teal-800 dark:text-teal-200">
+              Cómo asignar horarios y recursos sin conflictos. Crea un horario y pulsa “Load demo data” para probar un ejemplo ficticio; nada se envía a un servidor.
+            </p>
+          </div>
+          <Button icon={<ArrowRight className="h-4 w-4" />} onClick={() => navigate("/schedules/new")}>
+            Explorar demo
+          </Button>
+        </section>
+      ) : null}
+
+            {loading ? (
         <div className="flex justify-center py-16">
           <Spinner label="Loading schedules…" />
         </div>
