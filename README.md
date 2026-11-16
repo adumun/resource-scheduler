@@ -118,7 +118,7 @@ Resource Scheduler puede usarse como **experimento web con datos ficticios y sin
 npm ci
 npm test
 npm run lint
-npm run build:labs
+npm run validate:labs
 npm run preview
 # En otra terminal, sobre el preview local:
 node scripts/smoke-labs.mjs --base=http://localhost:4173
@@ -132,7 +132,7 @@ El build `npm run build:labs` utiliza `.env.labs` y genera una SPA estática en 
 - La interfaz muestra permanentemente un aviso de modo experimental y un enlace de regreso a `https://labs.adumun.cl/`.
 - Vite genera los assets y Cloudflare Pages usa `public/_redirects` para resolver rutas SPA directas/refresh.
 
-**Cloudflare Pages, proyecto independiente por validar:** root `/`, build `npm run build:labs`, output `dist`, rama `master` solo después de revisión y QA del PR. No añadir el enlace `/demo` a Labs ni marcarlo publicado antes de verificar el dominio y los assets. No introducir secretos en `VITE_*`.
+**Cloudflare Pages, proyecto independiente por validar:** root `/`, build `npm run validate:labs`, output `dist`, rama `master` solo después de revisión y QA del PR. No añadir el enlace `/demo` a Labs ni marcarlo publicado antes de verificar el dominio y los assets. No introducir secretos en `VITE_*`.
 
 > Seguridad: ningún dato de usuarios ni proyectos reales debe entrar en esta demo. La autenticación anterior sigue siendo solo para uso local y nunca debe presentarse como un login de producción.
 
