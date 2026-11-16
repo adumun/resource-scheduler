@@ -23,7 +23,13 @@ export function SlotEditor({ slots, onChange }: { slots: TimeSlot[]; onChange: (
     [slots],
   );
 
-  const addDateSpecific = () => {\n    const now = new Date();\n    const localDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;\n    onChange([...slots, { id: id.slot(), date: localDate, startMinutes: 9 * 60, endMinutes: 10 * 60 + 30, label: "09:00-10:30" }]);\n  };\n\n  const add = (dayOfWeek = 1) => {
+  const addDateSpecific = () => {
+    const now = new Date();
+    const localDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+    onChange([...slots, { id: id.slot(), date: localDate, startMinutes: 9 * 60, endMinutes: 10 * 60 + 30, label: "09:00-10:30" }]);
+  };
+
+  const add = (dayOfWeek = 1) => {
     const next = [...slots, { id: id.slot(), dayOfWeek, startMinutes: 9 * 60, endMinutes: 10 * 60 + 30, label: "09:00-10:30" }];
     onChange(next);
     setExpandedDays((current) => current.includes(dayOfWeek) ? current : [...current, dayOfWeek]);
