@@ -3,7 +3,7 @@ import type { TimeSlot } from "@/domain/time";
 import { id } from "@/domain/ids";
 import { Button, Input, Select, Table } from "@/presentation/components/ui";
 import type { Column } from "@/presentation/components/ui";
-import { Plus, Trash2, Copy, ChevronDown, ChevronUp } from "lucide-react";
+import { Plus, Trash2, Copy, ChevronDown, ChevronUp, CalendarDays } from "lucide-react";
 import { minutesToHHMM, labelToMinutesSafe } from "./timeUtils";
 
 const DAYS = [
@@ -23,7 +23,7 @@ export function SlotEditor({ slots, onChange }: { slots: TimeSlot[]; onChange: (
     [slots],
   );
 
-  const add = (dayOfWeek = 1) => {
+  const addDateSpecific = () => {\n    onChange([...slots, { id: id.slot(), date: new Date().toISOString().slice(0, 10), startMinutes: 9 * 60, endMinutes: 10 * 60 + 30, label: "09:00-10:30" }]);\n  };\n\n  const add = (dayOfWeek = 1) => {
     const next = [...slots, { id: id.slot(), dayOfWeek, startMinutes: 9 * 60, endMinutes: 10 * 60 + 30, label: "09:00-10:30" }];
     onChange(next);
     setExpandedDays((current) => current.includes(dayOfWeek) ? current : [...current, dayOfWeek]);
@@ -84,7 +84,7 @@ export function SlotEditor({ slots, onChange }: { slots: TimeSlot[]; onChange: (
           <p className="text-xs text-slate-500 dark:text-slate-400">Set the weekly windows when activities can be scheduled.</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button size="sm" variant="ghost" icon={<Copy className="h-3.5 w-3.5" />} disabled={(grouped.get(1)?.length ?? 0) === 0} onClick={copyMondayToWeekdays}>Copy Monday to weekdays</Button>
+          <Button size="sm" variant="ghost" icon={<CalendarDays className="h-3.5 w-3.5" />} onClick={addDateSpecific}>Add specific date</Button>\n          <Button size="sm" variant="ghost" icon={<Copy className="h-3.5 w-3.5" />} disabled={(grouped.get(1)?.length ?? 0) === 0} onClick={copyMondayToWeekdays}>Copy Monday to weekdays</Button>
           <Button size="sm" variant="secondary" icon={<Plus className="h-3.5 w-3.5" />} onClick={() => add()}>Add slot</Button>
         </div>
       </div>
