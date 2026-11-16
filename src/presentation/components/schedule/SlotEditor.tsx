@@ -17,7 +17,7 @@ const DAYS = [
 ];
 
 export function SlotEditor({ slots, onChange }: { slots: TimeSlot[]; onChange: (slots: TimeSlot[]) => void }) {
-  const [expandedDays, setExpandedDays] = useState<number[]>([]);
+  const [expandedDays, setExpandedDays] = useState<number[]>([1]);
   const grouped = useMemo(
     () => new Map(DAYS.map((day) => [day.value, slots.filter((slot) => slot.dayOfWeek === day.value)])),
     [slots],
@@ -48,7 +48,7 @@ export function SlotEditor({ slots, onChange }: { slots: TimeSlot[]; onChange: (
     onChange([...retained, ...copies]);
   };
 
-  const columns: Column<TimeSlot>[] = [
+  const dateSpecificSlots = slots.filter((slot) => slot.dayOfWeek === undefined);\n\n  const columns: Column<TimeSlot>[] = [
     {
       key: "day",
       header: "Day",
@@ -131,6 +131,35 @@ export function SlotEditor({ slots, onChange }: { slots: TimeSlot[]; onChange: (
             </section>
           );
         })}
+        {dateSpecificSlots.length > 0 ? (
+          <section className="overflow-hidden rounded-xl border border-amber-200 bg-white dark:border-amber-900 dark:bg-slate-900">
+            <div className="p-3">
+              <p className="font-semibold text-slate-800 dark:text-slate-100">Date-specific windows</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">{dateSpecificSlots.length} window(s) assigned to a specific date</p>
+            </div>
+            <div className="space-y-2 border-t border-amber-100 bg-amber-50/50 p-3 dark:border-amber-900 dark:bg-amber-950/20">
+              {dateSpecificSlots.map((slot) => (
+                <div key={slot.id} className="rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-900">
+                  <div className="mb-2 flex items-center justify-between">
+                    <span className="text-xs font-medium text-slate-500">Specific date</span>
+                    <button type="button" aria-label="Remove time window" onClick={() => remove(slot.id)} className="rounded-lg p-2 text-red-500"><Trash2 className="h-4 w-4" /></button>
+                  </div>
+                  <label className="block text-xs font-medium text-slate-600 dark:text-slate-300">Date
+                    <Input className="mt-1 min-h-11" type="date" value={slot.date ?? ""} onChange={(event) => update(slot.id, { date: event.target.value })} />
+                  </label>
+                  <div className="mt-2 grid grid-cols-2 gap-2">
+                    <label className="min-w-0 text-xs font-medium text-slate-600 dark:text-slate-300">From
+                      <Input className="mt-1 min-h-11" type="time" value={minutesToHHMM(slot.startMinutes)} onChange={(event) => update(slot.id, { startMinutes: labelToMinutesSafe(event.target.value, slot.startMinutes) })} />
+                    </label>
+                    <label className="min-w-0 text-xs font-medium text-slate-600 dark:text-slate-300">To
+                      <Input className="mt-1 min-h-11" type="time" value={minutesToHHMM(slot.endMinutes)} onChange={(event) => update(slot.id, { endMinutes: labelToMinutesSafe(event.target.value, slot.endMinutes) })} />
+                    </label>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        ) : null}
       </div>
 
       <div className="hidden md:block">
