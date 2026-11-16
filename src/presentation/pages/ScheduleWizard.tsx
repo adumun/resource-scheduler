@@ -170,7 +170,7 @@ export function ScheduleWizard() {
         ) : step === 2 ? (
           <div className="space-y-3">
             <div className="flex justify-end">
-              <Button size="sm" variant="ghost" onClick={() => set({ slots: makeDefaultWeekdaySlots() })}>Fill default weekday blocks</Button>
+              <Button size="sm" variant="secondary" className="min-h-11 w-full sm:w-auto" onClick={() => set({ slots: makeDefaultWeekdaySlots() })}>Replace with weekday template</Button>
             </div>
             <SlotEditor slots={config.slots} onChange={(slots) => set({ slots })} />
           </div>
